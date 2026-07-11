@@ -48,9 +48,10 @@ byte-exact output on every box:
 | ppc64le | POWER8E (VSX `VXOR`)         | 513 MB/s | 7.7 GB/s | **15.1×** |
 | s390x   | IBM z15 (vector `VX`)        | 1.58 GB/s | 15.0 GB/s | **9.5×** |
 | riscv64 | SpacemiT X60, RVV1.0 VLEN=256 | 253 MB/s | 1.35 GB/s | **5.3×** |
+| loong64 | Loongson 3C5000L (LSX)       | 648 MB/s | 6.96 GB/s | **10.8×** |
 
-amd64 (AVX2/SSE2) is verified native on CI; loong64 (LSX) is emitted and
-QEMU-checked, with real-hardware validation pending.
+amd64 (AVX2/SSE2) is verified native on CI; all five non-amd64 kernels are
+validated on **real hardware** (no QEMU): correct + measured above.
 
 Kernels are regenerated with `go run mojette_xor_<arch>_gen.go` (the `//go:build
 ignore` generators); the committed `mojette_xor_<arch>.s` files are the output.
