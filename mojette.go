@@ -88,13 +88,26 @@ func binIndex(cols int, d Direction, i, j int) int {
 	return raw - minRaw
 }
 
-// xorBlock XORs src into dst block-wise (GF(2) addition). It is isolated so a
-// SIMD variant can replace it later; dst and src must have equal length.
-func xorBlock(dst, src []byte) {
-	for i := range dst {
+// xorBlockScalar XORs src into dst byte-wise (GF(2) addition) with a portable
+// loop over min(len(dst), len(src)) bytes. It is the correctness oracle the SIMD
+// kernels are checked against and the tail/fallback every dispatcher finishes
+// with; dst and src have equal length in Mojette use, but the min guard keeps it
+// safe for the kernels' remainder slices.
+func xorBlockScalar(dst, src []byte) {
+	n := len(dst)
+	if len(src) < n {
+		n = len(src)
+	}
+	for i := 0; i < n; i++ {
 		dst[i] ^= src[i]
 	}
 }
+
+// xorBlock XORs src into dst byte-wise (dst[i] ^= src[i]). It dispatches to a
+// go-asmgen SIMD kernel on architectures that have one (amd64 SSE2/AVX2, arm64
+// NEON, riscv64 RVV, ppc64le VSX, s390x vector facility, loong64 LSX) and to the
+// scalar loop otherwise; see the per-architecture mojette_xor_*.go files. dst
+// and src must have equal length.
 
 // Reconstructible reports whether dirs satisfy the Katz criterion for a
 // rows*cols grid:
