@@ -1,3 +1,5 @@
+<p align="center"><img src="https://raw.githubusercontent.com/go-erasure/brand/main/social/go-erasure.png" alt="go-erasure/mojette" width="720"></p>
+
 # mojette
 
 [![ci](https://github.com/go-erasure/mojette/actions/workflows/ci.yml/badge.svg)](https://github.com/go-erasure/mojette/actions/workflows/ci.yml)
