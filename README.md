@@ -33,8 +33,22 @@ targets, falling back to the scalar loop elsewhere:
 The scalar loop remains the correctness oracle: a differential fuzzer and a
 size-sweep table test check every kernel's output byte-for-byte against it
 (empty, 1 byte, sub-block, exact and non-multiple block lengths, and large
-buffers). On an Apple M4 Max the arm64 NEON kernel runs the 1 MiB XOR at
-**~47 GB/s vs ~3.8 GB/s** scalar (about **12×**).
+buffers).
+
+### Measured on real hardware (1 MiB XOR, scalar → SIMD)
+
+Correctness and speed verified on real silicon (not QEMU) — no SIGILL/SIGBUS,
+byte-exact output on every box:
+
+| Arch    | Hardware                     | Scalar | SIMD | Speedup |
+|---------|------------------------------|--------|------|---------|
+| arm64   | Apple M4 Max (NEON)          | 3.8 GB/s | 47.7 GB/s | ~12.6× |
+| ppc64le | POWER8E (VSX `VXOR`)         | 513 MB/s | 7.7 GB/s | **15.1×** |
+| s390x   | IBM z15 (vector `VX`)        | 1.58 GB/s | 15.0 GB/s | **9.5×** |
+| riscv64 | SpacemiT X60, RVV1.0 VLEN=256 | 253 MB/s | 1.35 GB/s | **5.3×** |
+
+amd64 (AVX2/SSE2) is verified native on CI; loong64 (LSX) is emitted and
+QEMU-checked, with real-hardware validation pending.
 
 Kernels are regenerated with `go run mojette_xor_<arch>_gen.go` (the `//go:build
 ignore` generators); the committed `mojette_xor_<arch>.s` files are the output.
