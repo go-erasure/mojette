@@ -23,8 +23,8 @@ jobs:
           - { os: ubuntu-24.04-arm, arch: arm64 }
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-go@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v7
         with:
           go-version: '1.26.4'
       - name: vet
@@ -54,8 +54,8 @@ jobs:
           - { arch: ppc64le, image: "debian:trixie",                qemu: "power9" }
           - { arch: s390x,   image: "debian:trixie",                qemu: "qemu" }
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-go@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v7
         with:
           go-version: '1.26.4'
       - run: docker run --privileged --rm tonistiigi/binfmt --install all
@@ -80,8 +80,8 @@ jobs:
   emulated-ppc64le-power8:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-go@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v7
         with:
           go-version: '1.26.4'
       - run: docker run --privileged --rm tonistiigi/binfmt --install all
@@ -105,8 +105,8 @@ jobs:
           - {goos: darwin, goarch: arm64}
           - {goos: windows, goarch: amd64}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-go@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v7
         with:
           go-version: '1.26.4'
       - name: build ${{ matrix.target.goos }}/${{ matrix.target.goarch }}
