@@ -44,13 +44,13 @@ func main() {
 		Raw("BGE usedst").
 		Raw("MOVD R6, R4").
 		Label("usedst").
-		Raw("SRD $4, R4, R9").  // blocks = n >> 4
-		Raw("MOVD $0, R10").    // byte offset / bytes consumed
+		Raw("SRD $4, R4, R9"). // blocks = n >> 4
+		Raw("MOVD $0, R10").   // byte offset / bytes consumed
 		Label("loop").
 		Raw("CMP R9, $0").
 		Raw("BEQ done").
-		Raw("ADD R5, R10, R12"). // &src[off]
-		Raw("ADD R3, R10, R15"). // &dst[off]
+		Raw("ADD R5, R10, R12").       // &src[off]
+		Raw("ADD R3, R10, R15").       // &dst[off]
 		Raw("LXVD2X (R15)(R0), VS32"). // V0 = dst
 		Raw("LXVD2X (R12)(R0), VS33"). // V1 = src
 		Raw("VXOR V0, V1, V2").        // V2 = dst ^ src

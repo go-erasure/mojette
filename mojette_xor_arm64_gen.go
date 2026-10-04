@@ -36,16 +36,16 @@ func main() {
 		LoadArg("dst_len", "R1").
 		LoadArg("src_base", "R2").
 		LoadArg("src_len", "R3").
-		Raw("CMP R3, R1").              // n = min(dst_len, src_len)
-		Raw("CSEL LT, R1, R3, R1").     // R1 = R1<R3 ? R1 : R3
-		Raw("LSR $4, R1, R6").          // blocks = n >> 4
-		Raw("MOVD $0, R7").             // byte offset / bytes consumed
+		Raw("CMP R3, R1").          // n = min(dst_len, src_len)
+		Raw("CSEL LT, R1, R3, R1"). // R1 = R1<R3 ? R1 : R3
+		Raw("LSR $4, R1, R6").      // blocks = n >> 4
+		Raw("MOVD $0, R7").         // byte offset / bytes consumed
 		Label("loop").
 		Raw("CBZ R6, done").
-		Raw("ADD R0, R7, R10").         // &dst[off]
-		Raw("ADD R2, R7, R9").          // &src[off]
-		Raw("VLD1 (R10), [V0.B16]").    // dst
-		Raw("VLD1 (R9), [V1.B16]").     // src
+		Raw("ADD R0, R7, R10").             // &dst[off]
+		Raw("ADD R2, R7, R9").              // &src[off]
+		Raw("VLD1 (R10), [V0.B16]").        // dst
+		Raw("VLD1 (R9), [V1.B16]").         // src
 		Raw("VEOR V1.B16, V0.B16, V0.B16"). // dst ^= src
 		Raw("VST1 [V0.B16], (R10)").
 		Raw("ADD $16, R7, R7").
